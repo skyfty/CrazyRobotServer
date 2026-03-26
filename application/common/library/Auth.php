@@ -15,6 +15,8 @@ use app\api\model\LevelType as LevelTypeModel;//关卡类型
 use app\api\model\Pass as PassModel;//通过记录
 use app\api\model\Specialequipments as SpecialequipmentsModel;//特殊装备
 use app\api\model\Upgrade as UpgradeModel;//升级记录
+use app\api\model\Token as TokenModel;//Toke
+
 
 
 class Auth
@@ -243,6 +245,12 @@ class Auth
             $this->setError('User not exist');
             return false;
         }
+        //获取用户id
+        $userId = $user->id;
+        //初始化passmodel
+        $passModel = new PassModel();
+        //清除用户的所有通过记录
+        $passModel->clear($userId);
         //更新level为1
         $user->level = 1;
         //更新score为0

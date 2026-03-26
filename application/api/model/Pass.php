@@ -9,6 +9,14 @@ class Pass extends Model
     protected $table = 'pass';
 
     /**
+     * 清除用户的所有通过记录
+     */
+    public function clear($user_id)
+    {
+        $this->where('user_id', $user_id)->delete();
+    }
+
+    /**
      * 获取用户的所有通过记录
      */
     public function getAll($user_id)
