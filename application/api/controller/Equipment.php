@@ -41,6 +41,7 @@ class Equipment extends Api
             $params = $this->request->param();
             $index = $params['index'];
             $id = $params['id'];
+
             
             // 判断参数是否有值
             if ($index == null || $id == null) {
@@ -66,15 +67,16 @@ class Equipment extends Api
             
             // 获取装备索引数组的副本
             $equipmentEquippedIndex = $user['equipmentEquippedIndex'];
-            
+            $equipmentEquippedJson = json_encode($equipmentEquippedIndex);  
+
             // 判断装备是否已经装备在这个位置
             if ($equipmentEquippedIndex[$index]['id'] == $id) {
-                $this->success(__('装备已经装备在这个位置'), '', 0);
+                $this->success(__('装备已经装备在这个位置'), $equipmentEquippedJson, 0);
             }
             
             // 不能重复装备（检查其他位置）
             if (in_array($id, array_column($equipmentEquippedIndex, 'id'))) {
-                $this->success(__('装备已经装备在其他位置'), '', 0);
+                $this->success(__('装备已经装备在其他位置'), $equipmentEquippedJson, 0);
             }
             
             // 修改副本
