@@ -39,8 +39,8 @@ class Equipment extends Api
     public function EquipEquipment(){
             // post接收参数index、id
             $params = $this->request->param();
-            $index = $params['index'];
-            $id = $params['id'];
+            $index = isset($params['index']) ? (int)$params['index'] : null;
+            $id = isset($params['id']) ? (int)$params['id'] : null;
 
             
             // 判断参数是否有值
@@ -114,6 +114,7 @@ class Equipment extends Api
             $user = $this->auth->getInfo($userId);
             $user['equipment']=json_decode($user['equipment']);
             $user['upgradeData']=json_decode($user['upgradeData']);
+            $equipmentField = $user['equipmentField'] ?? 0;
             $listDetailsName='upgradeDatas';//升级数据详情
             $listDataName='upgradeData';//升级数据
             $haveGold='0';
@@ -149,7 +150,7 @@ class Equipment extends Api
                 }
             }  
            // 更新升级数据
-            $this->auth->updateUpgradeData($userId, json_encode($user[$listDataName]),$listDataName);
+            $this->auth->updateUpgradeData($userId, json_encode($user[$listDataName]),$listDataName,++$equipmentField);
             $this->success(__('升级成功'),'', 1);
 
         }

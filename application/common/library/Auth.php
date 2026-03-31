@@ -31,7 +31,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData'];
+    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem'];
 
     public function __construct($options = [])
     {
@@ -482,7 +482,7 @@ class Auth
     /*
      * 更新升级数据upgradeData
      */
-      public function updateUpgradeData($user_id, $upgradeDataJson,$listDataName)
+      public function updateUpgradeData($user_id, $upgradeDataJson,$listDataName, $equipmentField)
     {
         $user = User::get($user_id);
         if (!$user) {
@@ -490,6 +490,7 @@ class Auth
             return false;
         }
         $user->$listDataName = $upgradeDataJson;
+        $user->equipmentField = $equipmentField;
         $user->save();
         return true;
     }
