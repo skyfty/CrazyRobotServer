@@ -99,7 +99,15 @@ class Random extends Api
                         $addedCount++;
                     }
                 }
-                $equipmentJson = json_encode($existingEquipment);  
+
+                $updateEquipment = [];
+                foreach ($existingEquipment as $equipment) {
+                    if (array_search($equipment, $updateEquipment) === false) {
+                        $updateEquipment[] = $equipment;
+                    }
+                }
+
+                $equipmentJson = json_encode($updateEquipment);  
                 // 更新用户装备信息
                 if ($this->auth->updateEquipment($userId, $equipmentJson)) {
                     // $newUser = $this->auth->getInfo($userId);
