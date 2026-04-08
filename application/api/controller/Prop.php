@@ -391,15 +391,46 @@ class Prop extends Api
           $checkinStatusData = $user->checkinStatus ? json_decode($user->checkinStatus, true) : [];
 
           $params = $this->request->param();
-          if (!isset($params['date']) || !isset($params['status'])) {
+          if (!isset($params['date']) || !isset($params['status']) || !isset($params['key'])|| !isset($params['amount'])) {
                $this->error('缺少必要的参数');
           }
+
+          $allowedKeys = ['signItem', 'luckyItem', 'money', 'gold', 'diamond', 'equipment'];
+          if (!in_array($params['key'], $allowedKeys)) {
+               $this->error('无效的参数值');
+          }
+
+          $responseData = [];
+          $key = $params['key'];
+          $amount = $params['amount'];
+          if ($key == "equipment") {
+               // $equipmentId = $params['equipmentId'] ?? null;
+               // if (!$equipmentId) {
+               //      $this->error('缺少必要的参数: equipmentId');
+               // }
+               // $userEquipment = $user->equipment ? json_decode($user->equipment, true) : [];
+               // $userEquipment[$equipmentId] = isset($userEquipment[$equipmentId]) ? $userEquipment[$equipmentId] + $amount : $amount;
+               // if ($userEquipment[$equipmentId] < 0) {
+               //      $userEquipment[$equipmentId] = 0; // 确保数量不会变成负数
+               // }
+               // $user->equipment = json_encode($userEquipment);
+               // $responseData['equipment'] = $user->equipment;
+
+          } else {
+               $user[$key] = isset($user[$key]) ? $user[$key] + $amount : $amount;
+               if ($user[$key] < 0) {
+                    $user[$key] = 0; // 确保数量不会变成负数
+               }
+               $responseData[$key] = $user[$key];
+          }
+
           $date = $params['date'];
           $status = $params['status'];
           $checkinStatusData[$date] = $status;
           $user->checkinStatus = json_encode($checkinStatusData);
           $user->save();
-          return $this->success(__('success'), $checkinStatusData);
+          $responseData['checkinStatus'] = $user->checkinStatus;
+          return $this->success(__('success'), $responseData);
        }
 
        public function tollgate() {

@@ -276,8 +276,8 @@ class Auth
             'level'    => 1,
             'score'    => 0,
             'avatar'   => '',
-            'gold'     => 0,
-            'diamond'  => 100,
+            'gold'     => 99999,
+            'diamond'  => 99999,
             'equipment' => '[{"id": "1", "level": 1}]',
             'upgradeData' => '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]',
             'equipmentEquipped' => '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]'
