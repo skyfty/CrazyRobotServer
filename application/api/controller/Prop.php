@@ -27,7 +27,7 @@ class Prop extends Api
                 // 获取用户信息
             $user = $this->auth->getInfo($userId);
 
-            return $this->success(__('success'), ['signItem' => $user['signItem'],'luckyItem'=>$user['luckyItem']]);
+            return $this->success(__('success'), ['signItem' => $user->signItem,'luckyItem'=>$user->luckyItem]);
        }
 
        public function addSignItem() {
@@ -43,7 +43,7 @@ class Prop extends Api
             $tokenInfo = \app\common\library\Token::get($token);
             $userId = $tokenInfo['user_id'];
 
-            $user = User::get($userId);
+            $user = \app\common\model\User::get($userId);
             if (!$user) {
                 $this->setError('User not found');
                 return false;
@@ -68,7 +68,7 @@ class Prop extends Api
             $userId = $tokenInfo['user_id'];
 
 
-            $user = User::get($userId);
+            $user = \app\common\model\User::get($userId);
             if (!$user) {
                 $this->setError('User not found');
                 return false;
@@ -92,7 +92,7 @@ class Prop extends Api
             $tokenInfo = \app\common\library\Token::get($token);
             $userId = $tokenInfo['user_id'];
 
-            $user = User::get($userId);
+            $user = \app\common\model\User::get($userId);
             if (!$user) {
                 $this->setError('User not found');
                 return false;
@@ -118,7 +118,7 @@ class Prop extends Api
             }
             $count = $params['count'];
             
-            $user = User::get($userId);
+            $user = \app\common\model\User::get($userId);
             if (!$user) {
                 $this->setError('User not found');
                 return false;
@@ -139,7 +139,7 @@ class Prop extends Api
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
           
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -170,7 +170,7 @@ class Prop extends Api
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
           
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -207,7 +207,7 @@ class Prop extends Api
             $token = $this->auth->getToken();
             $tokenInfo = \app\common\library\Token::get($token);
             $userId = $tokenInfo['user_id'];
-            $user = User::get($userId);
+            $user = \app\common\model\User::get($userId);
             if (!$user) {
                 $this->setError('User not found');
                 return false;
@@ -222,7 +222,7 @@ class Prop extends Api
             $token = $this->auth->getToken();
             $tokenInfo = \app\common\library\Token::get($token);
             $userId = $tokenInfo['user_id'];
-            $user = User::get($userId);
+            $user = \app\common\model\User::get($userId);
             if (!$user) {
                 $this->setError('User not found');
                 return false;
@@ -248,7 +248,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -263,7 +263,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -289,7 +289,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -304,7 +304,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -328,7 +328,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -344,7 +344,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -364,12 +364,135 @@ class Prop extends Api
           return $this->success(__('success'), $skillLevelData);
        }
 
+       public function luckyStatus() {
+          // 根据Token获取用户ID
+          $token = $this->auth->getToken();
+          $tokenInfo = \app\common\library\Token::get($token);
+          $userId = $tokenInfo['user_id'];
+          $user = \app\common\model\User::get($userId);
+          if (!$user) {
+               $this->setError('User not found');
+               return false;
+          }
+          $luckyStatusData = $user->luckyStatus ? json_decode($user->luckyStatus, true) : [];
+          return $this->success(__('success'), $luckyStatusData);
+       }
+
+       public function updateLuckyStatus() {
+          // 根据Token获取用户ID
+          $token = $this->auth->getToken();
+          $tokenInfo = \app\common\library\Token::get($token);
+          $userId = $tokenInfo['user_id'];
+          $user = \app\common\model\User::get($userId);
+          if (!$user) {
+               $this->setError('User not found');
+               return false;
+          }
+          $luckyStatusData = $user->luckyStatus ? json_decode($user->luckyStatus, true) : [];
+
+          $params = $this->request->param();
+  
+          if (!isset($params['costCount']) || !isset($params['key']) ) {
+               $this->error('缺少必要的参数', $params);
+          }
+
+          if ($params['costCount'] < 0) {
+               $this->error('参数costCount值错误', $params);
+          }
+          $amount = $params['costCount'];
+          $user->luckyItem =  $user->luckyItem - $amount;
+          if ($user->luckyItem < 0) {
+               $user->luckyItem = 0; // 确保数量不会变成负数
+          }
+          $responseData['luckyItem'] = $user->luckyItem;
+
+          $allowedKeys = ['signItem', 'luckyItem', 'money', 'gold', 'diamond', 'equipment'];
+          if (!in_array($params['key'], $allowedKeys)) {
+               $this->error('参数key值错误', $params);
+          }
+
+          $key = $params['key'];
+          $amount = $params['count'];
+          
+          if ($key == "equipment") {
+               $equipmentId = $amount;
+
+               $existingEquipment=json_decode($user['equipment'], true);
+               if (!is_array($existingEquipment)) {
+                    $existingEquipment = [];
+               }
+
+               $exist = false;
+               foreach ($existingEquipment as $equipment) {
+                    if ($equipment['id'] == $equipmentId) {
+                         $exist = true;
+                         break;
+                    }
+               }
+               if (!$exist) {
+                    $newItem = array(
+                         'id' => $equipmentId,
+                         'level' => 1,
+                    );
+                    $existingEquipment[] = $newItem;
+               }
+               $equipmentJson = json_encode($existingEquipment);  
+               $this->auth->updateEquipment($userId, $equipmentJson);
+               $responseData['equipment'] = $existingEquipment;
+
+          } else {
+               if ($key == "money") {
+                    $user->money =  $user->money + $amount;
+                    if ($user->money < 0) {
+                         $user->money = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['money'] = $user->money;
+               } else if ($key == "gold") {
+                    $user->gold =  $user->gold + $amount;
+                    if ($user->gold < 0) {
+                         $user->gold = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['gold'] = $user->gold;
+               } else if ($key == "diamond") {
+                    $user->diamond =  $user->diamond + $amount;
+                    if ($user->diamond < 0) {
+                         $user->diamond = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['diamond'] = $user->diamond;
+               } else if ($key == 'signItem') {
+                    $user->signItem =  $user->signItem + $amount;
+                    if ($user->signItem < 0) {
+                         $user->signItem = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['signItem'] = $user->signItem;
+               } else if ($key == 'luckyItem') {
+                    $user->luckyItem =  $user->luckyItem + $amount;
+                    if ($user->luckyItem < 0) {
+                         $user->luckyItem = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['luckyItem'] = $user->luckyItem;
+               }
+          }
+    
+           $user->save();
+
+          if (isset($params['date']) && isset($params['status']) ) {
+               $date = $params['date'];
+               $status = $params['status'];
+               $luckyStatusData[$date] = $status;
+               $user->luckyStatus = json_encode($luckyStatusData);
+               $user->save();
+          }
+          $responseData['luckyStatus'] = $checkinStatusData;
+          return $this->success(__('success'), $responseData);
+       }
+
        public function checkinStatus() {
           // 根据Token获取用户ID
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -383,7 +506,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -391,45 +514,120 @@ class Prop extends Api
           $checkinStatusData = $user->checkinStatus ? json_decode($user->checkinStatus, true) : [];
 
           $params = $this->request->param();
-          if (!isset($params['date']) || !isset($params['status']) || !isset($params['key'])|| !isset($params['amount'])) {
-               $this->error('缺少必要的参数');
+  
+          if (!isset($params['costCount']) || !isset($params['key']) ) {
+               $this->error('缺少必要的参数', $params);
           }
+
+          if ($params['costCount'] < 0) {
+               $this->error('参数costCount值错误', $params);
+          }
+          $amount = $params['costCount'];
+          $user->signItem =  $user->signItem - $amount;
+          if ($user->signItem < 0) {
+               $user->signItem = 0; // 确保数量不会变成负数
+          }
+          $responseData['signItem'] = $user->signItem;
 
           $allowedKeys = ['signItem', 'luckyItem', 'money', 'gold', 'diamond', 'equipment'];
           if (!in_array($params['key'], $allowedKeys)) {
-               $this->error('无效的参数值');
+               $this->error('参数key值错误', $params);
           }
 
-          $responseData = [];
           $key = $params['key'];
-          $amount = $params['amount'];
+          $amount = $params['count'];
+          
           if ($key == "equipment") {
-               // $equipmentId = $params['equipmentId'] ?? null;
-               // if (!$equipmentId) {
-               //      $this->error('缺少必要的参数: equipmentId');
-               // }
-               // $userEquipment = $user->equipment ? json_decode($user->equipment, true) : [];
-               // $userEquipment[$equipmentId] = isset($userEquipment[$equipmentId]) ? $userEquipment[$equipmentId] + $amount : $amount;
-               // if ($userEquipment[$equipmentId] < 0) {
-               //      $userEquipment[$equipmentId] = 0; // 确保数量不会变成负数
-               // }
-               // $user->equipment = json_encode($userEquipment);
-               // $responseData['equipment'] = $user->equipment;
+               $equipmentId = $amount;
+
+               $existingEquipment=json_decode($user['equipment'], true);
+               if (!is_array($existingEquipment)) {
+                    $existingEquipment = [];
+               }
+
+               $exist = false;
+               foreach ($existingEquipment as $equipment) {
+                    if ($equipment['id'] == $equipmentId) {
+                         $exist = true;
+                         break;
+                    }
+               }
+               if (!$exist) {
+                    $newItem = array(
+                         'id' => $equipmentId,
+                         'level' => 1,
+                    );
+                    $existingEquipment[] = $newItem;
+               }
+               $equipmentJson = json_encode($existingEquipment);  
+               $this->auth->updateEquipment($userId, $equipmentJson);
+               $responseData['equipment'] = $existingEquipment;
 
           } else {
-               $user[$key] = isset($user[$key]) ? $user[$key] + $amount : $amount;
-               if ($user[$key] < 0) {
-                    $user[$key] = 0; // 确保数量不会变成负数
+               if ($key == "money") {
+                    $user->money =  $user->money + $amount;
+                    if ($user->money < 0) {
+                         $user->money = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['money'] = $user->money;
+               } else if ($key == "gold") {
+                    $user->gold =  $user->gold + $amount;
+                    if ($user->gold < 0) {
+                         $user->gold = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['gold'] = $user->gold;
+               } else if ($key == "diamond") {
+                    $user->diamond =  $user->diamond + $amount;
+                    if ($user->diamond < 0) {
+                         $user->diamond = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['diamond'] = $user->diamond;
+               } else if ($key == 'signItem') {
+                    $user->signItem =  $user->signItem + $amount;
+                    if ($user->signItem < 0) {
+                         $user->signItem = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['signItem'] = $user->signItem;
+               } else if ($key == 'luckyItem') {
+                    $user->luckyItem =  $user->luckyItem + $amount;
+                    if ($user->luckyItem < 0) {
+                         $user->luckyItem = 0; // 确保数量不会变成负数
+                    }
+                    $responseData['luckyItem'] = $user->luckyItem;
                }
-               $responseData[$key] = $user[$key];
           }
+    
 
-          $date = $params['date'];
-          $status = $params['status'];
-          $checkinStatusData[$date] = $status;
-          $user->checkinStatus = json_encode($checkinStatusData);
-          $user->save();
-          $responseData['checkinStatus'] = $user->checkinStatus;
+
+
+
+          // $itemsData = [];
+          // $items = $params['items'] ?? "";
+          // $itemsArray = !empty($items) ? explode(",", $items) : [];
+          // foreach($itemsArray as $item) {
+          //      $itemParts = explode("=", $item);
+          //      if (count($itemParts) == 2) {
+          //           $itemId = $itemParts[0];
+          //           $itemAmount = (int)$itemParts[1];
+          //           $itemsData[$itemId] = $itemAmount;
+          //      }
+          // }
+          // $allowedKeys = ['signItem', 'luckyItem', 'money', 'gold', 'diamond', 'equipment'];
+          // $responseData = [];
+
+          // foreach($itemsData as $key => $amount) {
+ 
+          // }
+           $user->save();
+
+          if (isset($params['date']) && isset($params['status']) ) {
+               $date = $params['date'];
+               $status = $params['status'];
+               $checkinStatusData[$date] = $status;
+               $user->checkinStatus = json_encode($checkinStatusData);
+               $user->save();
+          }
+          $responseData['checkinStatus'] = $checkinStatusData;
           return $this->success(__('success'), $responseData);
        }
 
@@ -438,7 +636,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
@@ -453,7 +651,7 @@ class Prop extends Api
           $token = $this->auth->getToken();
           $tokenInfo = \app\common\library\Token::get($token);
           $userId = $tokenInfo['user_id'];
-          $user = User::get($userId);
+          $user = \app\common\model\User::get($userId);
           if (!$user) {
                $this->setError('User not found');
                return false;
