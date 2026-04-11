@@ -253,8 +253,10 @@ class Auth
         $user->level = 1;
         //更新score为0
         $user->score = 0;
-        $user->gold = 0;
-        $user->diamond = 100;
+        $user->gold = 99999;
+        $user->diamond = 999999;
+        $user->luckyItem = 99999;
+        $user->signItem = 999999;
         $user->equipment = '[{"id": "1", "level": 1}]';
         $user->upgradeData = '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]';
         $user->equipmentEquipped = '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]';
@@ -278,6 +280,8 @@ class Auth
             'avatar'   => '',
             'gold'     => 99999,
             'diamond'  => 99999,
+            'luckyItem'     => 99999,
+            'signItem'  => 99999,
             'equipment' => '[{"id": "1", "level": 1}]',
             'upgradeData' => '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]',
             'equipmentEquipped' => '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]'

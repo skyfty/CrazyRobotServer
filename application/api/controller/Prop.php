@@ -399,8 +399,10 @@ class Prop extends Api
           if ($params['costCount'] < 0) {
                $this->error('参数costCount值错误', $params);
           }
-          $amount = $params['costCount'];
+          $amount = $params['costCount'];         
+
           $user->luckyItem =  $user->luckyItem - $amount;
+
           if ($user->luckyItem < 0) {
                $user->luckyItem = 0; // 确保数量不会变成负数
           }
@@ -459,31 +461,18 @@ class Prop extends Api
                          $user->diamond = 0; // 确保数量不会变成负数
                     }
                     $responseData['diamond'] = $user->diamond;
-               } else if ($key == 'signItem') {
-                    $user->signItem =  $user->signItem + $amount;
-                    if ($user->signItem < 0) {
-                         $user->signItem = 0; // 确保数量不会变成负数
-                    }
-                    $responseData['signItem'] = $user->signItem;
-               } else if ($key == 'luckyItem') {
-                    $user->luckyItem =  $user->luckyItem + $amount;
-                    if ($user->luckyItem < 0) {
-                         $user->luckyItem = 0; // 确保数量不会变成负数
-                    }
-                    $responseData['luckyItem'] = $user->luckyItem;
                }
           }
     
-           $user->save();
 
           if (isset($params['date']) && isset($params['status']) ) {
                $date = $params['date'];
                $status = $params['status'];
                $luckyStatusData[$date] = $status;
                $user->luckyStatus = json_encode($luckyStatusData);
-               $user->save();
           }
-          $responseData['luckyStatus'] = $checkinStatusData;
+               $user->save();
+          $responseData['luckyStatus'] = $luckyStatusData;
           return $this->success(__('success'), $responseData);
        }
 
