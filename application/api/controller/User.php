@@ -12,6 +12,7 @@ use app\api\model\LevelType as LevelTypeModel;//关卡类型
 use app\api\model\Pass as PassModel;//通过记录
 use app\api\model\Specialequipments as SpecialequipmentsModel;//特殊装备
 use app\api\model\Upgrade as UpgradeModel;//升级记录
+use app\api\model\Skill as SkillModel;//升级记录
 
 /**
  * 会员接口
@@ -101,13 +102,18 @@ class User extends Api
             $userData['pass'] = $levelTypes;//通关id
             //获取用户的所有特殊装备
             $specialequipmentsModel = new SpecialequipmentsModel();
-            $userData['equipmentDetails'] = $specialequipmentsModel->getAll($userData['equipment'],$userData['equipmentEquipped']);//特殊装备详情
+            $userData['equipmentDetails'] = $specialequipmentsModel->getAll($userData['equipment'],$userData['equipmentEquipped'], 0, 10);//特殊装备详情
             //获取用户的所有升级记录
             $upgradeModel = new UpgradeModel();
             $userData['upgradeDatas'] = $upgradeModel->getAll($userData['upgradeData']);//升级记录详情
             //  $userData['upgradeDatas']=$upgradeModel->getUserUpgradeDatas($userData['upgradeData']);
              $userData['equipmentEquippedIndex']=json_decode($userData['equipmentEquipped'],true);
             // $data = ['userinfo' => $userData];
+
+            $skillModel = new SkillModel();
+            $userData['skillDetails'] = $skillModel->getAll($userData['skill']);//技能详情
+            
+
             $this->success(__('Logged in successful'), $userData);
         } else {
             $this->error($this->auth->getError());

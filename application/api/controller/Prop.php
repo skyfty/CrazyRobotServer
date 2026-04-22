@@ -25,7 +25,7 @@ class Prop extends Api
             $tokenInfo = \app\common\library\Token::get($token);
             $userId = $tokenInfo['user_id'];
                 // 获取用户信息
-            $user = $this->auth->getInfo($userId);
+            $user = \app\common\model\User::get($userId);
 
             return $this->success(__('success'), ['signItem' => $user->signItem,'luckyItem'=>$user->luckyItem]);
        }
@@ -154,11 +154,11 @@ class Prop extends Api
           if ($params['type'] == "gold") {
                $user->gold = isset($user->gold) ? $user->gold + $params['count'] : $params['count'];
                $user->save();
-               return $this->success(__('success'), ['gold' => $user->gold]);
+               return $this->success(__('success'), ['diamond' => $user->diamond,'gold' => $user->gold]);
           } elseif ($params['type'] == "diamond") {
                $user->diamond = isset($user->diamond) ? $user->diamond + $params['count'] : $params['count'];
                $user->save();
-               return $this->success(__('success'), ['diamond' => $user->diamond]);
+               return $this->success(__('success'), ['diamond' => $user->diamond,'gold' => $user->gold]);
           }  else {
                $this->error('参数type值错误');
           }
@@ -188,14 +188,14 @@ class Prop extends Api
                     $user->gold = 0; // 确保数量不会变成负数
                }
                $user->save();
-               return $this->success(__('success'), ['gold' => $user->gold]);
+               return $this->success(__('success'), ['diamond' => $user->diamond,'gold' => $user->gold]);
           } elseif ($params['type'] == "diamond") {
                $user->diamond = isset($user->diamond) ? $user->diamond - $params['count'] : $params['count'];
                if ($user->diamond < 0) {
                     $user->diamond = 0; // 确保数量不会变成负数
                }
                $user->save();
-               return $this->success(__('success'), ['diamond' => $user->diamond]);
+               return $this->success(__('success'), ['diamond' => $user->diamond,'gold' => $user->gold]);
           }  else {
                $this->error('参数type值错误');
           }

@@ -13,12 +13,13 @@ use app\api\model\Enemy as EnemyModel;//敌人模型
 use app\api\model\LevelType as LevelTypeModel;//关卡类型
 use app\api\model\Equipment as EquipmentModel;//装备模型
 use app\api\model\UpgradeLevel as UpgradeLevelModel;//升级等级模型
+use app\api\model\Specialequipments as SpecialequipmentsModel;//特殊装备模型
 
 
 //装备类的接口
 class Equipment extends Api
 {
-       protected $noNeedLogin = ['getAllEquipment','getAllUpgradeLevel'];
+       protected $noNeedLogin = ['getAllUpgradeLevel', 'getEquipmentList', 'getEquipment'];
        protected $noNeedRight = '*';
          /**
        * 获取所有装备升级
@@ -170,14 +171,66 @@ class Equipment extends Api
             }  
             return null;
         }
-        // /**
-        //  * 获取所有装备
-        //  */
-        // public function getAllEquipment(){
-        //     $equipmentModel = new EquipmentModel();
-        //     $equipmentList = $equipmentModel->getAll();
-        //     $this->success(__('获取所有装备成功'), $equipmentList);
-        // }
+
+         /**
+          * 获取所有装备
+          */
+         public function getAllEquipment(){
+            $specialequipmentsModel = new SpecialequipmentsModel();
+            $equipments = $specialequipmentsModel->getAllEquipment();
+             
+            $token = $this->auth->getToken();
+            $tokenInfo = \app\common\library\Token::get($token);
+            $userId = $tokenInfo['user_id'];
+             // 获取用户信息
+            $user = $this->auth->getInfo($userId);
+
+            $responseData = [];
+            $user['equipment']=json_decode($user['equipment']);
+            foreach ($equipments as $equipment) {
+                foreach ($user['equipment'] as $userEquipment) {
+                    if ($equipment['id'] == $userEquipment->id) {
+                        $equipment['level'] = $userEquipment->level;
+                        break;
+                    }
+                }
+            }
+            $this->success(__('获取所有装备成功'), $equipments);
+        }
+
+        public function getEquipmentList(){
+            $specialequipmentsModel = new SpecialequipmentsModel();
+            $equipments = $specialequipmentsModel->getAllEquipment();
+        
+            $responseData = [];
+            foreach ($equipments as $equipment) {
+                $responseData[] = [
+                    'id' => $equipment['id'],
+                    'name' => $equipment['name'],
+                    'description' => $equipment['description'],
+                    'upgradegold' => $equipment['upgradegold'],
+                ];
+            }
+            $this->success(__('获取所有装备成功'), $responseData);
+        }
+
+        public function getEquipment(){
+            
+            $params = $this->request->param();
+            if (!isset($params['id'])) {
+                $this->error('缺少必要的参数');
+            }
+            $id = $params['id'];
+
+            $specialequipmentsModel = new SpecialequipmentsModel();
+            $equipment = $specialequipmentsModel->get($id);
+            if (!$equipment) {
+                $this->error('装备不存在');
+            }
+
+            $this->success(__('获取装备成功'), $equipment);
+        }
+
         /**
          * 获取所有详情信息PlayerEquipmentAdd
          */

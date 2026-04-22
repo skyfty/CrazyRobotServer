@@ -11,7 +11,7 @@ class Specialequipments extends Model
     /**
      * 获取所有特殊装备
      */
-    public function getAll($equipmentJson,$equipmentEquipped)
+    public function getAll($equipmentJson,$equipmentEquipped, $limit_index = 0, $limit_count = -1)
     {
         //json解析
         $equipmentArray = json_decode($equipmentJson, true);
@@ -19,44 +19,44 @@ class Specialequipments extends Model
         if (empty($equipmentArray)) {
             return [];
         }
-               $equipmentEquippedArray = json_decode($equipmentEquipped, true);
+        $equipmentEquippedArray = json_decode($equipmentEquipped, true);
 
         $data = [];
+        if ($limit_count == -1) {
+            $allEquipment = $this->select();
+        } else {
+            $allEquipment = $this->limit($limit_index, $limit_count)->select();
+        }
+
         //遍历数组，查询数据库
-        foreach ($equipmentArray as $equipment) {
+        foreach ($allEquipment as $equipment) {
             $id = $equipment['id'];
             // //转换整型
             $id = intval($id);
-            // $equipment['tt'] = $id;
-            //   $data[] = $equipment;
-            
-            //查询数据库
-            $newData = $this->where('id', $id)->find();
-            $newData['level'] = $equipment['level'];
-            $newData['isEquipped'] = false;
 
-            for ($i = 0; $i < count($equipmentEquippedArray); $i++) {
-                if ($equipmentEquippedArray[$i]['id'] == $id) {
-                    $newData['isEquipped'] = true;
+            foreach($equipmentArray as $equip) {
+                if ($equip['id'] == $id) {
+                    $equipment['level'] = $equip['level'];
                     break;
                 }
             }
-
-            //  $data[] = $newData;
-            // //判断是否存在
-            if ($newData) {
-                //合并数组
-                $data[] = $newData;
+            $equipment['isEquipped'] = false;
+            foreach ($equipmentEquippedArray as $equip) {
+                if ($equip['id'] == $id) {
+                    $equipment['isEquipped'] = true;
+                    break;
+                }   
             }
+            $data[] = $equipment;
         }
         return $data;
     }
     /**
      * 获取所有装备
      */
-    public function getAllEquipment()
+    public function getAllEquipment($limit_index = 0, $limit_count = 10)
     {
-        $data = $this->select();
+        $data = $this->limit($limit_index, $limit_count)->select();
         return $data;
     }
 }
