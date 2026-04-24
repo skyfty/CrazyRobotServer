@@ -102,7 +102,7 @@ class User extends Api
             $userData['pass'] = $levelTypes;//通关id
             //获取用户的所有特殊装备
             $specialequipmentsModel = new SpecialequipmentsModel();
-            $userData['equipmentDetails'] = $specialequipmentsModel->getAll($userData['equipment'],$userData['equipmentEquipped'], 0, 10);//特殊装备详情
+            $userData['equipmentDetails'] = $specialequipmentsModel->getAll($userData['equipment'],$userData['equipmentEquipped']);//特殊装备详情
             //获取用户的所有升级记录
             $upgradeModel = new UpgradeModel();
             $userData['upgradeDatas'] = $upgradeModel->getAll($userData['upgradeData']);//升级记录详情

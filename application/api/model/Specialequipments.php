@@ -56,7 +56,7 @@ class Specialequipments extends Model
      */
     public function getAllEquipment($limit_index = 0, $limit_count = 10)
     {
-        $data = $this->limit($limit_index, $limit_count)->select();
+        $data = $this->select();
         return $data;
     }
 }

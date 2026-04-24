@@ -13,28 +13,23 @@ class Skill extends Model
      */
     public function getAll($Json)
     {
-        
         //json解析
-         $Array  = json_decode($Json, true);
-          $details = [];
-        //判断是否为空
-        if (empty($Array)) {
-            return [];
-        }
-        $data = [];
-        //遍历数组，查询数据库
-        foreach ($Array as $value) {
-            $id = $value['id'];
-            $id = intval($id);
+        $Array  = json_decode($Json, true);
+        $details = [];
 
-            //查询数据库
-            $newData = $this->where('id', $id)->find();
-            // //判断是否存在
-            if ($newData) {
-                $data[] = $newData;
+        $skillData = $this->select();
+        foreach ($skillData as $skill) {
+            $id = $skill['id'];
+            $id = intval($id);
+            foreach ($Array as $value) {
+                if ($value['id'] == $id) {
+                    $skill['level'] = $value['level'];
+                    break;
+                }
             }
+            $details[] = $skill;
         }
-        return $data;
+        return  $details;
 
     }
 
