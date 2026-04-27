@@ -33,7 +33,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem', 'skill', 'skillLevel'];
+    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem', 'skill', 'skillLevel', 'currentskill'];
 
     public function __construct($options = [])
     {

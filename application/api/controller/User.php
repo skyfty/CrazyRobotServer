@@ -111,7 +111,7 @@ class User extends Api
             // $data = ['userinfo' => $userData];
 
             $skillModel = new SkillModel();
-            $userData['skillDetails'] = $skillModel->getAll($userData['skill']);//技能详情
+            $userData['skillDetails'] = $skillModel->getAll($userData['skill'], $userData['currentskill']);//技能详情
             
 
             $this->success(__('Logged in successful'), $userData);

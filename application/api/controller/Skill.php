@@ -62,4 +62,96 @@ class Skill extends Api
                $this->success(__('获取技能成功'), ['id' => $id, 'level' => 1]);
           }
        }
+
+       public function upgrade() {
+                     // 根据Token获取用户ID
+          $token = $this->auth->getToken();
+          $tokenInfo = \app\common\library\Token::get($token);
+          $userId = $tokenInfo['user_id'];
+
+          $user = \app\common\model\User::get($userId);
+          if (!$user) {
+               $this->setError('User not found');
+               return false;
+          }
+          $params = $this->request->param();
+
+          if (!isset($params['id'])) {
+               $this->error('缺少必要的参数或参数值土f错误 {$params}');
+          }
+
+          $id = $params['id'];
+          $id = intval($id);
+
+          
+          $skillModel = new SkillModel();
+          $skill = $skillModel->get($id );
+          if(!$skill){
+               $this->error('获取失败');
+          }
+          if ($user->gold < $skill->upgradegold) {
+               $this->error('用户没有足够的金币');
+          }
+
+          $existingSkill = false;
+          $userSkill = $user->skill !== null ? json_decode($user->skill, true) : [];
+          foreach ($userSkill as $s) {
+               if ($s['id'] == $id) {
+                    $s['level'] += 1; // 升级技能
+                    $existingSkill = true;
+                    break;
+               }
+          }
+          if (!$existingSkill) {
+               $userSkill[] = ['id' => $id, 'level' => 1]; // 如果用户没有该技能，则添加新技能
+          } else {
+               $user->gold -= $skill->upgradegold; // 扣除金币
+          }
+          $user->skill = json_encode($userSkill);
+          $user->save();
+          $this->success(__('技能升级成功'));
+       }
+
+       public function setCurrentSkill() {
+          
+          $token = $this->auth->getToken();
+          $tokenInfo = \app\common\library\Token::get($token);
+          $userId = $tokenInfo['user_id'];
+
+          $user = \app\common\model\User::get($userId);
+          if (!$user) {
+               $this->setError('User not found');
+               return false;
+          }
+          $params = $this->request->param();
+
+          if (!isset($params['id'])) {
+               $this->error('缺少必要的参数或参数值土f错误 {$params}');
+          }
+          $id = $params['id'];
+          $id = intval($id);
+
+          $skillModel = new SkillModel();
+          $skill = $skillModel->get($id );
+          if(!$skill){
+               $this->error('获取失败');
+          }
+
+          $userSkill = $user->skill !== null ? json_decode($user->skill, true) : [];
+          $hasSkill = false;
+          foreach ($userSkill as $s) {
+               if ($s['id'] == $id) {
+                    $hasSkill = true;
+                    break;
+               }
+          }
+          if (!$hasSkill) {
+               $this->error('用户没有该技能');
+          }
+          $user->currentskill = $id;
+          $user->save();
+          $this->success(__('设置当前技能成功'));
+
+       }
 }
+
