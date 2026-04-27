@@ -45,8 +45,8 @@ class Equipment extends Api
 
             
             // 判断参数是否有值
-            if ($index == null || $id == null) {
-                $this->error('缺少必要的参数');
+            if ($index === null || $id ===   null) {
+                $this->error("缺少必要的参数 index: {$index}, id: {$id}");
             }   
             
             // 根据Token获取用户ID
@@ -76,8 +76,11 @@ class Equipment extends Api
             }
             
             // 不能重复装备（检查其他位置）
+            if ($id !== 0) {
+
             if (in_array($id, array_column($equipmentEquippedIndex, 'id'))) {
                 $this->success(__('装备已经装备在其他位置'), $equipmentEquippedJson, 0);
+            }
             }
             
             // 修改副本
@@ -90,7 +93,11 @@ class Equipment extends Api
             if ($this->auth->updateEquipmentEquipped($userId, $equipmentEquippedJson)) {
                 $newUser = $this->auth->getInfo($userId);
                 $newequipmentEquippedJson = json_encode($newUser['equipmentEquippedIndex']);  
-                $this->success(__('装备成功'), $newequipmentEquippedJson, 1);
+                if ($id == 0) {
+                    $this->success(__('卸下装备成功'), $newequipmentEquippedJson, 1);
+                } else {
+                    $this->success(__('装备成功'), $newequipmentEquippedJson, 1);
+                }
             } else {
                 $this->error('更新用户装备信息失败');
             }
