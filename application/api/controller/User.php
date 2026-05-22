@@ -106,7 +106,7 @@ class User extends Api
             //获取用户的所有升级记录
             $upgradeModel = new UpgradeModel();
             $userData['upgradeDatas'] = $upgradeModel->getAll($userData['upgradeData']);//升级记录详情
-            //  $userData['upgradeDatas']=$upgradeModel->getUserUpgradeDatas($userData['upgradeData']);
+             $userData['upgradeDatas']=$upgradeModel->getUserUpgradeDatas($userData['upgradeData']);
              $userData['equipmentEquippedIndex']=json_decode($userData['equipmentEquipped'],true);
             // $data = ['userinfo' => $userData];
 

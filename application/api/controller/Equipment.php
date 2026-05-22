@@ -108,10 +108,11 @@ class Equipment extends Api
         public function upgrade(){
              // post接收参数index、id
             $params = $this->request->param();
+
             $type = $params['type'];//0升级数据 1升级装备
             $id = $params['id'];//升级的装备id
             // 判断参数是否有值
-            if ($type == null || $id == null) {
+            if ($type === null || $id === null) {
                 $this->error('缺少必要的参数');
             }   
                  // 根据Token获取用户ID

@@ -95,13 +95,14 @@ class Skill extends Api
 
           $existingSkill = false;
           $userSkill = $user->skill !== null ? json_decode($user->skill, true) : [];
-          foreach ($userSkill as $s) {
-               if ($s['id'] == $id) {
+          foreach ($userSkill as &$s) {
+               if ($s['id'] === $id) {
                     $s['level'] += 1; // 升级技能
                     $existingSkill = true;
                     break;
                }
           }
+          unset($s);
           if (!$existingSkill) {
                $userSkill[] = ['id' => $id, 'level' => 1]; // 如果用户没有该技能，则添加新技能
           } else {
@@ -109,7 +110,7 @@ class Skill extends Api
           }
           $user->skill = json_encode($userSkill);
           $user->save();
-          $this->success(__('技能升级成功'));
+          $this->success(__('技能升级成功'), $userSkill);
        }
 
        public function setCurrentSkill() {

@@ -416,7 +416,7 @@ class Auth
             $user->upgradeDatas = $upgradeModel->getAll($user->upgradeData);//升级记录详情
 
             $skillModel = new SkillModel();
-            $user->skillDetails = $skillModel->getAll($user->skill);//技能详情
+            $user->skillDetails = $skillModel->getAll($user->skill,0, -1);//技能详情
             
              $user->equipmentEquippedIndex=json_decode($user->equipmentEquipped,true);
         return $user;
