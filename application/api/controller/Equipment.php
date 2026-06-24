@@ -94,9 +94,9 @@ class Equipment extends Api
                 $newUser = $this->auth->getInfo($userId);
                 $newequipmentEquippedJson = json_encode($newUser['equipmentEquippedIndex']);  
                 if ($id == 0) {
-                    $this->success(__('卸下装备成功'), $newequipmentEquippedJson, 1);
+                    $this->success(__('卸下炮弹成功'), $newequipmentEquippedJson, 1);
                 } else {
-                    $this->success(__('装备成功'), $newequipmentEquippedJson, 1);
+                    $this->success(__('装备炮弹成功'), $newequipmentEquippedJson, 1);
                 }
             } else {
                 $this->error('更新用户装备信息失败');
@@ -203,7 +203,7 @@ class Equipment extends Api
                     }
                 }
             }
-            $this->success(__('获取所有装备成功'), $equipments);
+            $this->success(__('获取所有炮弹成功'), $equipments);
         }
 
         public function getEquipmentList(){
@@ -219,7 +219,7 @@ class Equipment extends Api
                     'upgradegold' => $equipment['upgradegold'],
                 ];
             }
-            $this->success(__('获取所有装备成功'), $responseData);
+            $this->success(__('获取所有炮弹成功'), $responseData);
         }
 
         public function getEquipment(){
@@ -233,10 +233,10 @@ class Equipment extends Api
             $specialequipmentsModel = new SpecialequipmentsModel();
             $equipment = $specialequipmentsModel->get($id);
             if (!$equipment) {
-                $this->error('装备不存在');
+                $this->error('炮弹不存在');
             }
 
-            $this->success(__('获取装备成功'), $equipment);
+            $this->success(__('获取炮弹成功'), $equipment);
         }
 
         /**
