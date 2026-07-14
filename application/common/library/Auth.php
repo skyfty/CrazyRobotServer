@@ -33,7 +33,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem', 'skill', 'skillLevel', 'currentskill'];
+    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem', 'skill', 'skillLevel', 'currentskill', 'antagonist'];
 
     public function __construct($options = [])
     {
@@ -262,6 +262,8 @@ class Auth
         $user->equipment = '[{"id": "1", "level": 1}]';
         $user->upgradeData = '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]';
         $user->equipmentEquipped = '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]';
+        $user->antagonist = '{}';
+
         $user->skill = '[]';
 
         $user->save();
@@ -289,6 +291,7 @@ class Auth
             'equipment' => '[{"id": "1", "level": 1}]',
             'upgradeData' => '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]',
             'equipmentEquipped' => '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]',
+            'antagonist' => '{}',
             'skill' => '[]'
         ];
          $params = array_merge($data, [
@@ -417,8 +420,9 @@ class Auth
 
             $skillModel = new SkillModel();
             $user->skillDetails = $skillModel->getAll($user->skill,0, -1);//技能详情
-            
-             $user->equipmentEquippedIndex=json_decode($user->equipmentEquipped,true);
+            $user->equipmentEquippedIndex=json_decode($user->equipmentEquipped,true);
+
+            $user->antagonist=json_decode($user->antagonist,true);
         return $user;
     }
     /**

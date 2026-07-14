@@ -109,6 +109,7 @@ class User extends Api
              $userData['upgradeDatas']=$upgradeModel->getUserUpgradeDatas($userData['upgradeData']);
              $userData['equipmentEquippedIndex']=json_decode($userData['equipmentEquipped'],true);
             // $data = ['userinfo' => $userData];
+             $userData['antagonist']=json_decode($userData['antagonist'],true);
 
             $skillModel = new SkillModel();
             $userData['skillDetails'] = $skillModel->getAll($userData['skill'], $userData['currentskill']);//技能详情
@@ -320,6 +321,30 @@ class User extends Api
 
         Ems::flush($email, 'changeemail');
         $this->success();
+    }
+
+    public function updateAntagonist() {
+        
+        $user = $this->auth->getUser();
+        if ($user == null) {
+            $this->error(__('Captcha is incorrect'));
+        }
+        $ids = $this->request->post('ids');
+        //ids="1,2,3,4"
+        $antagonist = explode(',', $ids);
+        $user->antagonist = json_encode($antagonist);
+        $user->save();
+        $this->success("ok", $antagonist);
+
+    }
+
+    public function antagonist() {
+
+        $user = $this->auth->getUser();
+        if ($user == null) {
+            $this->error(__('Captcha is incorrect'));
+        }
+        $this->result("ok", json_decode($user->antagonist, true));
     }
 
     /**
