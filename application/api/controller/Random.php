@@ -61,8 +61,33 @@ class Random extends Api
             $this->success(__('未找到宝物配置'), '', 0);
         }
 
+        // 根据Token获取用户ID
+        $token = $this->auth->getToken();
+        $tokenInfo = \app\common\library\Token::get($token);
+
+        $userId = $tokenInfo['user_id'];
+
+        $user = \app\common\model\User::get($userId);
+        if (!$user) {
+            $this->setError('User not found');
+            return false;
+        }
+        
+        //增加研发次数
+        $user->researchcount += $num;
+        //是否触发最高奖励
+        $hasTriggerMaxReward = false;
+        if($user->researchcount >= 100){
+            $hasTriggerMaxReward = true;
+            $user->researchcount = 0;
+        }
+        
         $weights = [];
         $total = 0;
+        
+        $minWeightItem = null;
+        $minWeight = 100;
+        
         foreach ($treasures as $t) {
             $prob = floatval($t->probability);
             $w = (int)round($prob * 100);
@@ -71,13 +96,25 @@ class Random extends Api
             }
             $weights[] = ['item' => $t, 'weight' => $w];
             $total += $w;
+            
+            // 查找最小正权重（排除权重为0的不可获得道具）
+            if ($w > 0 && $w < $minWeight) {
+                 $minWeight = $w;
+                 $minWeightItem = $t;
+            }
         }
 
         if ($total <= 0) {
             $this->error('宝物配置概率错误');
         }
-
+        
         $drawnTreasures = [];
+        if($hasTriggerMaxReward){
+            $num -= 1;
+            $drawnTreasures[] = $minWeightItem;
+        }
+
+       
         for ($i = 0; $i < $num; $i++) {
             $rand = mt_rand(1, $total);
             $acc = 0;
@@ -96,19 +133,9 @@ class Random extends Api
             }
         }
 
-
-        // 根据Token获取用户ID
-        $token = $this->auth->getToken();
-        $tokenInfo = \app\common\library\Token::get($token);
-
-        $userId = $tokenInfo['user_id'];
-
-        $user = \app\common\model\User::get($userId);
-        if (!$user) {
-            $this->setError('User not found');
-            return false;
-        }
-
+        //保存数据
+        $user->save();
+        
         foreach ($drawnTreasures as $treasure) {
             if ($treasure->type === 'gold') {
                 $user->gold += $treasure->amount;
@@ -139,8 +166,6 @@ class Random extends Api
                 $this->auth->updateEquipment($userId, $equipmentJson);
             }
         }
-
-
 
         $this->success(__('随机生成成功'), $drawnTreasures, 1);
     }

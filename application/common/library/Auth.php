@@ -33,7 +33,7 @@ class Auth
     //默认配置
     protected $config = [];
     protected $options = [];
-    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem', 'skill', 'skillLevel', 'currentskill', 'antagonist'];
+    protected $allowFields = ['id', 'username', 'gold', 'diamond', 'magazinelevel', 'equipmentEquipped', 'equipment', 'upgradeData', 'equipmentField', 'signItem', 'luckyItem', 'skill', 'skillLevel', 'currentskill', 'antagonist','researchcount'];
 
     public function __construct($options = [])
     {
@@ -263,7 +263,7 @@ class Auth
         $user->upgradeData = '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]';
         $user->equipmentEquipped = '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]';
         $user->antagonist = '{}';
-
+        $user->researchcount = 0;
         $user->skill = '[]';
 
         $user->save();
@@ -292,7 +292,8 @@ class Auth
             'upgradeData' => '[{"id": 1, "level": 0}, {"id": 2, "level": 0}, {"id": 3, "level": 0}, {"id": 4, "level": 0}, {"id": 5, "level": 0}, {"id": 6, "level": 0}, {"id": 7, "level": 0}]',
             'equipmentEquipped' => '[{"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}, {"id": 0}]',
             'antagonist' => '{}',
-            'skill' => '[]'
+            'skill' => '[]',
+            'researchcount' => 0
         ];
          $params = array_merge($data, [
             'nickname'  => preg_match("/^1[3-9]{1}\d{9}$/", $username) ? substr_replace($username, '****', 3, 4) : $username,

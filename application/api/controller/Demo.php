@@ -15,7 +15,7 @@ class Demo extends Api
     //如果接口已经设置无需登录,那也就无需鉴权了
     //
     // 无需登录的接口,*表示全部
-    protected $noNeedLogin = ['test', 'test1'];
+    protected $noNeedLogin = ['test', 'test1', 'test4'];
     // 无需鉴权的接口,*表示全部
     protected $noNeedRight = ['test2'];
 
@@ -70,4 +70,10 @@ class Demo extends Api
         $this->success('返回成功', ['action' => 'test3']);
     }
 
+    public function test4()
+    {
+        $param = $this->request->param();
+        $num = $param['num'];
+        $this->success('返回成功', ['num' => $num]);
+    }
 }
