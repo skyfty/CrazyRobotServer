@@ -21,4 +21,10 @@ class AchievementProgress extends Model
              'status' => $status,
          ]);
     }
+    
+    public function clear($user_id)
+    {
+         var_export($user_id);
+        $this->where('user_id', $user_id)->delete();
+    }
 }

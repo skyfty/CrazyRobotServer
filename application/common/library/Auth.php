@@ -16,7 +16,8 @@ use app\api\model\Pass as PassModel;//通过记录
 use app\api\model\Specialequipments as SpecialequipmentsModel;//特殊装备
 use app\api\model\Upgrade as UpgradeModel;//升级记录
 use app\api\model\Skill as SkillModel;//升级记录
-
+use app\api\model\AchievementProgress as AchievementProgressModel;//成就领取记录
+use app\api\model\Achievement as AchievementModel;//成就记录
 
 
 class Auth
@@ -267,6 +268,13 @@ class Auth
         $user->skill = '[]';
 
         $user->save();
+        
+        //清除用户成就数据
+        $achievementProgressModel = new AchievementProgressModel();
+        $achievementProgressModel->clear($userId);
+        $achievementModel = new AchievementModel();
+        $achievementModel->clear($userId);
+        
         return true;
     }
     /**
