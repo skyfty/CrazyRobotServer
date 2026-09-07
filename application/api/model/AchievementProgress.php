@@ -24,7 +24,7 @@ class AchievementProgress extends Model
     
     public function clear($user_id)
     {
-         var_export($user_id);
+        //var_export($user_id);
         $this->where('user_id', $user_id)->delete();
     }
 }

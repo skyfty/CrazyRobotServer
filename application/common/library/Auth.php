@@ -18,7 +18,8 @@ use app\api\model\Upgrade as UpgradeModel;//升级记录
 use app\api\model\Skill as SkillModel;//升级记录
 use app\api\model\AchievementProgress as AchievementProgressModel;//成就领取记录
 use app\api\model\Achievement as AchievementModel;//成就记录
-
+use app\api\model\Building as BuildingModel;//建筑记录
+use app\api\model\Guide as GuideModel;//引导记录
 
 class Auth
 {
@@ -274,6 +275,13 @@ class Auth
         $achievementProgressModel->clear($userId);
         $achievementModel = new AchievementModel();
         $achievementModel->clear($userId);
+        
+        //清除用户引导
+        $guideModel = new GuideModel();
+        $guideModel->clear();
+        //清除用户建筑
+        $buildingModel = new BuildingModel();
+        $buildingModel->clear();
         
         return true;
     }
